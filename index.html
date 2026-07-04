@@ -929,33 +929,37 @@
   // All filenames below are verified real Wikimedia Commons files (checked against
   // live category listings), run through cf() so encoding is always correct.
   var images = [
-    {file:"Sohail Gate, Rohtas Fort, Pakistan.jpg", cap:"Sohail Gate, the ceremonial main entrance"},
-    {file:"Rohtas Fort Magnificent Kabuli Gate.jpg", cap:"Kabuli Gate, facing toward Kabul"},
+    {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSEIbOgXlzXYTmwY_uPhhen9UtxUg2l09fMWY0M2v53A&s=10", cap:"Sohail Gate, the ceremonial main entrance"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/kabuli-gate/photos/rohtas-fort_kabuligate02.jpg", cap:"Kabuli Gate, facing toward Kabul"},
     {file:"Kabuli Gate - Rohtas Fort by Usman Ghani.jpg", cap:"Kabuli Gate, detail view"},
     {file:"Rohtas Fort Gate Elevation.jpg", cap:"Elevation view of a fort gate"},
     {file:"Rohtas Fort (Jehlum).jpg", cap:"General view of the fort's walls"},
     {file:"Rohtas Fort (Jhelum, Pakistan) - World Heritage Site.jpeg", cap:"Rohtas Fort, UNESCO World Heritage Site"},
     {file:"Rohtas Fort 1.jpg", cap:"Ashlar stone bastions along the curtain wall"},
     {file:"Rohtas Fort 3.jpg", cap:"A gateway interior, showing stone construction"},
-    {file:"Entrance Gate, Rohtas Fort.JPG", cap:"Langar Khani Gate entrance"},
+    {url:"https://thumbs.dreamstime.com/b/langar-khani-gate-path-rainwater-hole-inside-rohtas-fort-414328145.jpg", cap:"Langar Khani Gate entrance"},
+    {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF8aheb1lfCJBVvLq9iGS1xsMCXxpbGjHSsnpyQ9hOmtSPsXYQSNp_DA&s=10", cap:"Langar Khani Gate, rainwater hole and path"},
     {file:"Exit Gate of Rohtas Fort.jpg", cap:"Khwas Khani Gate, the original main entrance"},
     {file:"Faseel Rohtas Fort Jhelum.jpg", cap:"A stretch of the fort's massive faseel (wall)"},
     {file:"Rohtas Fort 8.jpg", cap:"Detail of gate stonework"},
     {file:"FORT SOHAIL GATE.jpg", cap:"Sohail Gate, full elevation"},
     {file:"Sohail Gate (31775580777).jpg", cap:"Sohail Gate seen from the approach road"},
     {file:"An architectural detail from Sohail Gate by Usman Ghani.JPG", cap:"Carved detail on Sohail Gate"},
-    {file:"Shah Chandwali Gate Rohtas Fort.jpg", cap:"Shah Chandwali Gate, linking citadel to fort"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/shah-chandwali-gate/photos/rohtas-fort_shahchandwaligate02.jpg", cap:"Shah Chandwali Gate, linking citadel to fort"},
     {file:"Inside View of Shah Chandwali Gate by Sheikh Rashid Hameed.jpg", cap:"Interior view of Shah Chandwali Gate"},
-    {file:"Talaqi Gate (45996396274).jpg", cap:"Talaqi Gate, the fort's ill-omened gate"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/talaqi-gate/photos/rohtas-fort_talaqigate03.jpg", cap:"Talaqi Gate, the fort's ill-omened gate"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/tulla-mori-gate/photos/rohtas-fort_tullamorigate03.jpg", cap:"Tulla Mori Gate"},
     {file:"An interior shot from the walls of Rohtas by Usman Ghani.JPG", cap:"Interior of the fortification walls"},
     {file:"Kaneez ghar.jpg", cap:"Kaneez Ghar, a residential structure within the fort"},
     {file:"Sunset in Rohtas fort near Islamabad.jpg", cap:"Sunset light over the fort's ramparts"},
-    {file:"Entrance gate to the Rohtas Fort 071.jpg", cap:"Approach to one of the fort's gateways"}
+    {file:"Entrance gate to the Rohtas Fort 071.jpg", cap:"Approach to one of the fort's gateways"},
+    {url:"https://upload.wikimedia.org/wikipedia/commons/0/07/Rohtas_Fort_Gate.jpg", cap:"One of the fort's gates"}
   ];
+  function imgSrc(im, width){ return im.url ? im.url : cf(im.file, width); }
   var galleryGrid = document.getElementById('galleryGrid');
   images.forEach(function(im){
     var fig = document.createElement('figure');
-    fig.innerHTML = '<img loading="lazy" src="'+cf(im.file,700)+'" alt="'+im.cap+'"><figcaption>'+im.cap+'</figcaption>';
+    fig.innerHTML = '<img loading="lazy" src="'+imgSrc(im,700)+'" alt="'+im.cap+'"><figcaption>'+im.cap+'</figcaption>';
     fig.addEventListener('click', function(){ openLightbox(im); });
     var imgEl = fig.querySelector('img');
     imgEl.addEventListener('error', function(){ fig.style.display = 'none'; }, {once:true});
@@ -963,7 +967,7 @@
   });
   var lightbox = document.getElementById('lightbox');
   function openLightbox(im){
-    document.getElementById('lightboxImg').src = cf(im.file,1400);
+    document.getElementById('lightboxImg').src = imgSrc(im,1400);
     document.getElementById('lightboxImg').alt = im.cap;
     document.getElementById('lightboxCaption').textContent = im.cap;
     lightbox.classList.add('open');
