@@ -7,6 +7,9 @@
 <meta name="description" content="Echoes of Stone presents an interactive history and architecture explorer of Qila Rohtas, the 16th-century Sur Empire fortress and UNESCO World Heritage Site in Punjab, Pakistan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://commons.wikimedia.org">
+<link rel="preload" as="image" href="https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="https://drive.google.com/thumbnail?id=1h7ssK4HQ1jkK-jPV9xH2oJJYsjP8mCIj&sz=w200">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -49,7 +52,20 @@
   .eyebrow.on-dark{ color:var(--sandstone);}
   section{position:relative;}
   .section-pad{padding:110px 0;}
-  @media(max-width:720px){ .section-pad{padding:72px 0;} }
+  @media(max-width:720px){ .section-pad{padding:64px 0;} }
+  @media(max-width:480px){ .section-pad{padding:48px 0;} }
+
+  /* ---------- accessibility: skip link ---------- */
+  .skip-link{
+    position:absolute; left:12px; top:-60px; background:var(--sandstone); color:var(--green-deep);
+    padding:10px 16px; font-weight:700; font-size:0.85rem; z-index:1000; transition:top 0.15s ease;
+    border-radius:2px; text-decoration:none;
+  }
+  .skip-link:focus{ top:12px; }
+
+  /* ---------- icon system (replaces all emoji) ---------- */
+  .icon{ width:1em; height:1em; display:inline-block; vertical-align:-0.15em; flex:none; }
+  .icon-lg{ width:26px; height:26px; }
 
   /* ---------- reduced motion ---------- */
   @media (prefers-reduced-motion: reduce){
@@ -76,27 +92,57 @@
   /* ---------- nav ---------- */
   header.nav{
     position:sticky; top:0; z-index:100;
-    background:rgba(16,28,19,0.92); backdrop-filter:blur(8px);
+    background:rgba(16,28,19,0.94); backdrop-filter:blur(8px);
     border-bottom:1px solid rgba(201,168,118,0.25);
   }
   .nav-inner{
-    max-width:1180px; margin:0 auto; padding:14px 28px;
+    max-width:1180px; margin:0 auto; padding:10px 28px;
     display:flex; align-items:center; justify-content:space-between; gap:24px;
   }
-  .brand{ display:flex; align-items:center; gap:10px; color:var(--sandstone-pale); text-decoration:none;}
-  .brand-mark{
-    width:34px; height:34px; flex:none; object-fit:contain; border-radius:4px;
+  .brand{ display:flex; align-items:center; gap:11px; color:var(--sandstone-pale); text-decoration:none;}
+  .brand-mark-wrap{
+    width:52px; height:52px; flex:none; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; padding:2px;
   }
-  .brand-text{font-family:var(--serif); font-weight:700; font-size:1.05rem; letter-spacing:0.01em;}
+  .brand-mark{
+    width:100%; height:100%; object-fit:contain; display:block;
+  }
+  .brand-text{font-family:var(--serif); font-weight:700; font-size:1.18rem; letter-spacing:0.01em;}
   .brand-text span{color:var(--sandstone);}
   nav.links{ display:flex; gap:22px; align-items:center;}
-  nav.links a{
+  nav.links > a{
     color:var(--sandstone-pale); text-decoration:none; font-size:0.86rem; font-weight:500;
     opacity:0.82; transition:opacity 0.2s ease, color 0.2s ease;
     white-space:nowrap;
   }
-  nav.links a:hover{ opacity:1; color:var(--sandstone);}
-  .nav-toggle{ display:none; background:none; border:1px solid rgba(201,168,118,0.4); color:var(--sandstone-pale); border-radius:6px; padding:8px 10px; font-size:1rem; }
+  nav.links > a:hover{ opacity:1; color:var(--sandstone);}
+  .nav-toggle{
+    display:none; background:none; border:1px solid rgba(201,168,118,0.4); color:var(--sandstone-pale);
+    border-radius:6px; padding:8px; align-items:center; justify-content:center;
+  }
+
+  /* nav "More" dropdown */
+  .nav-more{ position:relative; }
+  .nav-more-btn{
+    background:none; border:none; color:var(--sandstone-pale); font-family:var(--sans);
+    font-size:0.86rem; font-weight:500; opacity:0.82; cursor:pointer; display:inline-flex;
+    align-items:center; gap:5px; padding:0; transition:opacity 0.2s ease, color 0.2s ease;
+  }
+  .nav-more-btn:hover, .nav-more-btn[aria-expanded="true"]{ opacity:1; color:var(--sandstone); }
+  .nav-more-btn .icon{ transition:transform 0.2s ease; }
+  .nav-more-btn[aria-expanded="true"] .icon{ transform:rotate(180deg); }
+  .nav-dropdown{
+    position:absolute; top:calc(100% + 16px); right:0; min-width:220px;
+    background:var(--green-deep); border:1px solid rgba(201,168,118,0.25);
+    box-shadow:var(--shadow); padding:8px; display:none; flex-direction:column;
+  }
+  .nav-dropdown.open{ display:flex; }
+  .nav-dropdown a{
+    color:var(--sandstone-light); text-decoration:none; font-size:0.86rem; padding:10px 12px;
+    border-radius:2px; transition:background 0.15s ease, color 0.15s ease;
+  }
+  .nav-dropdown a:hover{ background:rgba(201,168,118,0.1); color:var(--sandstone);}
+
   @media(max-width:920px){
     nav.links{
       position:absolute; top:100%; left:0; right:0; background:var(--green-deep);
@@ -105,7 +151,10 @@
       display:none;
     }
     nav.links.open{ display:flex; }
-    .nav-toggle{ display:inline-block; }
+    .nav-toggle{ display:flex; }
+    .nav-more{ width:100%; }
+    .nav-more-btn{ width:100%; justify-content:space-between; }
+    .nav-dropdown{ position:static; box-shadow:none; border:none; background:none; padding:4px 0 0 12px; width:100%; }
   }
 
   /* ---------- hero ---------- */
@@ -115,58 +164,61 @@
   }
   .hero-bg{
     position:absolute; inset:0; z-index:0;
+    background-color:var(--green-deep);
     background-image:
       linear-gradient(180deg, rgba(16,24,17,0.35) 0%, rgba(14,22,15,0.55) 55%, rgba(10,17,11,0.94) 100%),
-      url("https://commons.wikimedia.org/wiki/Special:FilePath/Sohail%20Gate%2C%20Rohtas%20Fort%2C%20Pakistan.jpg?width=1920");
+      url("https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg");
     background-size:cover; background-position:center 30%;
     transform:scale(1.06);
     animation:heroZoom 20s ease-out forwards;
   }
   @keyframes heroZoom{ from{transform:scale(1.12);} to{transform:scale(1.0);} }
-  .hero-content{ position:relative; z-index:2; padding:0 0 88px; width:100%;}
-  .hero-badge-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px;}
-  .badge{
-    display:inline-flex; align-items:center; gap:7px;
-    border:1px solid rgba(232,218,184,0.45); border-radius:999px;
-    padding:6px 14px; font-size:0.74rem; font-family:var(--mono);
-    letter-spacing:0.04em; text-transform:uppercase; color:var(--sandstone-light);
-    background:rgba(16,28,19,0.35);
+  .hero-content{ position:relative; z-index:2; padding:0 0 88px; width:100%; max-width:760px;}
+  .hero-kicker{
+    display:inline-flex; align-items:center; gap:9px; font-family:var(--mono);
+    text-transform:uppercase; letter-spacing:0.14em; font-size:0.72rem; font-weight:600;
+    color:var(--sandstone); border-bottom:1px solid rgba(201,168,118,0.4); padding-bottom:12px;
+    margin-bottom:28px;
   }
-  .badge.unesco{ border-color:var(--sandstone); color:var(--sandstone); }
   .hero h1{
-    font-size:clamp(2.4rem, 6vw, 5.1rem); line-height:1.02; max-width:16ch;
+    font-size:clamp(2.3rem, 5.6vw, 4.6rem); line-height:1.04; max-width:15ch;
     color:#fff; text-shadow:0 6px 40px rgba(0,0,0,0.35);
   }
   .hero h1 em{ color:var(--sandstone); font-style:italic; }
   .hero-sub{
-    max-width:52ch; font-size:1.08rem; color:var(--sandstone-light);
-    margin:22px 0 34px; font-weight:400;
+    max-width:52ch; font-size:1.05rem; color:var(--sandstone-light);
+    margin:20px 0 32px; font-weight:400;
   }
-  .btn-row{ display:flex; flex-wrap:wrap; gap:14px;}
+  .btn-row{ display:flex; flex-wrap:wrap; gap:26px; align-items:center;}
   .btn{
     font-family:var(--sans); font-weight:600; font-size:0.92rem;
-    padding:14px 24px; border-radius:2px; text-decoration:none;
+    padding:14px 22px; border-radius:2px; text-decoration:none;
     display:inline-flex; align-items:center; gap:8px; transition:transform 0.2s ease, background 0.2s ease, color .2s ease;
     border:1px solid transparent; cursor:pointer;
   }
   .btn-primary{ background:var(--sandstone); color:var(--green-deep);}
   .btn-primary:hover{ background:#fff; transform:translateY(-2px);}
-  .btn-ghost{ border-color:rgba(232,218,184,0.5); color:var(--sandstone-pale);}
-  .btn-ghost:hover{ border-color:var(--sandstone); color:var(--sandstone); transform:translateY(-2px);}
-  .scroll-cue{
-    position:absolute; right:28px; bottom:26px; z-index:2; color:var(--sandstone-light);
-    font-family:var(--mono); font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase;
-    writing-mode:vertical-rl; display:flex; align-items:center; gap:10px; opacity:0.8;
+  .btn-text{
+    font-weight:600; font-size:0.92rem; color:var(--sandstone-pale); text-decoration:none;
+    display:inline-flex; align-items:center; gap:7px; border-bottom:1px solid transparent;
+    padding-bottom:2px; transition:border-color .2s ease, color .2s ease;
   }
-  .scroll-cue::after{ content:""; width:1px; height:48px; background:var(--sandstone-light); display:block;}
+  .btn-text:hover{ color:var(--sandstone); border-color:var(--sandstone);}
+  .scroll-cue{
+    position:absolute; right:28px; bottom:28px; z-index:2; color:var(--sandstone-light);
+    display:flex; align-items:center; justify-content:center; opacity:0.85;
+    width:38px; height:38px; border:1px solid rgba(232,218,184,0.4); border-radius:50%;
+    animation:cueBounce 2.2s ease-in-out infinite;
+  }
+  @keyframes cueBounce{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(6px);} }
   @media(max-width:720px){ .scroll-cue{display:none;} }
 
   /* ---------- section headers ---------- */
   .section-head{ max-width:640px; margin-bottom:52px;}
-  .section-head h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:10px; }
+  .section-head h2{ font-size:clamp(1.7rem,3.2vw,2.5rem); margin-top:10px; }
   .section-head p{ color:#4A4735; margin-top:14px; font-size:1.02rem;}
   .on-green .section-head p{ color:var(--sandstone-light); }
-  .section-tag{ font-family:var(--serif); font-style:italic; color:var(--rust); }
+  @media(max-width:480px){ .section-head{margin-bottom:34px;} }
 
   /* ---------- quick facts (stone tablets) ---------- */
   .facts-section{ background:var(--sandstone-pale); }
@@ -176,12 +228,12 @@
   }
   @media(max-width:900px){ .facts-grid{ grid-template-columns:repeat(2,1fr);} }
   .fact{
-    background:var(--paper); padding:30px 22px; text-align:left; position:relative;
+    background:var(--paper); padding:28px 20px; text-align:left; position:relative;
   }
-  .fact .icon{ font-size:1.5rem; margin-bottom:14px; display:block;}
+  .fact .icon-wrap{ color:var(--rust); margin-bottom:14px; display:block;}
   .fact .num{
-    font-family:var(--serif); font-weight:800; font-size:2rem; color:var(--green);
-    display:block; line-height:1;
+    font-family:var(--serif); font-weight:800; font-size:1.9rem; color:var(--green);
+    display:block; line-height:1.1;
   }
   .fact .label{
     font-family:var(--mono); text-transform:uppercase; letter-spacing:0.08em;
@@ -193,8 +245,9 @@
   .timeline-section{ background:var(--green-deep); color:var(--sandstone-pale); }
   .timeline-scroll{
     display:flex; gap:0; overflow-x:auto; padding:10px 0 24px; scroll-snap-type:x proximity;
-    -webkit-overflow-scrolling:touch;
+    -webkit-overflow-scrolling:touch; cursor:grab;
   }
+  .timeline-scroll.dragging{ cursor:grabbing; scroll-snap-type:none; user-select:none; }
   .timeline-scroll::-webkit-scrollbar{ height:6px; }
   .timeline-scroll::-webkit-scrollbar-thumb{ background:var(--green-mid); border-radius:4px; }
   .t-item{
@@ -212,6 +265,14 @@
   .t-year{ font-family:var(--mono); color:var(--sandstone); font-size:1.3rem; font-weight:600;}
   .t-title{ font-family:var(--serif); font-size:1.15rem; margin:8px 0 8px; color:#fff;}
   .t-desc{ font-size:0.88rem; color:var(--sandstone-light); line-height:1.55;}
+  .scroll-hint{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--mono);
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--sandstone);
+    margin-top:6px; opacity:1; transition:opacity 0.4s ease;
+  }
+  .scroll-hint.hidden{ opacity:0; pointer-events:none; }
+  .scroll-hint .icon{ animation:hintSlide 1.6s ease-in-out infinite; }
+  @keyframes hintSlide{ 0%,100%{ transform:translateX(0);} 50%{ transform:translateX(6px);} }
 
   /* ---------- map ---------- */
   .map-section{ background:var(--sandstone-pale); }
@@ -234,9 +295,10 @@
   .arch-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--line);}
   @media(max-width:900px){ .arch-grid{ grid-template-columns:1fr; } }
   .arch-card{ background:var(--paper); padding:0 0 30px;}
-  .arch-card-img{ width:100%; height:170px; object-fit:cover; display:block; margin-bottom:24px; filter:saturate(0.92);}
+  .arch-card-imgwrap{ position:relative; width:100%; height:170px; overflow:hidden; margin-bottom:24px; background:var(--sandstone-pale);}
+  .arch-card-img{ width:100%; height:170px; object-fit:cover; display:block; filter:saturate(0.92);}
   .arch-card-body{ padding:0 28px; }
-  .arch-card h3{ font-size:1.25rem; margin-bottom:6px;}
+  .arch-card h3{ font-size:1.2rem; margin-bottom:6px;}
   .arch-card .sub{ font-family:var(--mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--rust); margin-bottom:16px; display:block;}
   .spec-list{ list-style:none; margin:16px 0 0; padding:0; font-size:0.88rem;}
   .spec-list li{ display:flex; justify-content:space-between; padding:8px 0; border-top:1px dashed var(--line); color:#4A4735;}
@@ -253,8 +315,9 @@
     transition:background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
     display:flex; flex-direction:column; gap:8px; min-height:150px; overflow:hidden;
   }
+  .gate-thumb-wrap{ position:relative; width:100%; height:120px; background:rgba(201,168,118,0.08); overflow:hidden;}
   .gate-thumb{
-    width:100%; height:120px; object-fit:cover; display:block; background:rgba(201,168,118,0.08);
+    width:100%; height:120px; object-fit:cover; display:block;
     filter:saturate(0.92);
   }
   .gate-card .gate-num,.gate-card .gate-name,.gate-card .gate-tag{ padding:0 18px; }
@@ -277,13 +340,14 @@
     background:var(--paper); color:var(--ink); max-width:640px; width:100%;
     max-height:86vh; overflow-y:auto; border:1px solid var(--ink); box-shadow:var(--shadow);
   }
-  .modal-img{ width:100%; height:240px; object-fit:cover; background:var(--sandstone-light);}
+  .modal-imgwrap{ position:relative; width:100%; height:240px; background:var(--sandstone-light);}
+  .modal-img{ width:100%; height:240px; object-fit:cover; display:block;}
   .modal-body{ padding:30px 32px 34px;}
   .modal-body .eyebrow{ margin-bottom:8px; display:block;}
-  .modal-body h3{ font-size:1.7rem; margin-bottom:16px;}
+  .modal-body h3{ font-size:1.6rem; margin-bottom:16px;}
   .modal-close{
     position:absolute; top:16px; right:16px; background:var(--ink); color:var(--sandstone-pale);
-    border:none; width:36px; height:36px; border-radius:50%; font-size:1.1rem; cursor:pointer;
+    border:none; width:36px; height:36px; border-radius:50%; cursor:pointer;
     display:flex; align-items:center; justify-content:center; z-index:2;
   }
   .modal-wrap{ position:relative; }
@@ -297,7 +361,7 @@
   .strategy-card{
     background:var(--paper); border:1px solid var(--line); padding:26px 22px; position:relative;
   }
-  .strategy-card .glyph{ font-size:1.6rem; }
+  .strategy-card .glyph{ color:var(--rust); }
   .strategy-card h4{ font-size:1.05rem; margin:14px 0 8px;}
   .strategy-card p{ font-size:0.88rem; color:#4A4735; margin:0;}
   .strategy-diagram{ margin-top:56px; }
@@ -317,11 +381,11 @@
   }
   details.acc summary{
     cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;
-    font-family:var(--serif); font-size:1.15rem; color:#fff; gap:20px;
+    font-family:var(--serif); font-size:1.1rem; color:#fff; gap:20px;
   }
   details.acc summary::-webkit-details-marker{ display:none; }
-  details.acc summary .plus{ font-family:var(--mono); color:var(--sandstone); font-size:1.2rem; flex:none; transition:transform 0.2s ease;}
-  details.acc[open] summary .plus{ transform:rotate(45deg); }
+  details.acc summary .icon{ color:var(--sandstone); transition:transform 0.2s ease; flex:none;}
+  details.acc[open] summary .icon{ transform:rotate(180deg); }
   details.acc .acc-body{ padding-top:14px; color:var(--sandstone-light); font-size:0.92rem; max-width:70ch;}
 
   /* ---------- gallery ---------- */
@@ -330,9 +394,9 @@
   @media(max-width:700px){ .masonry{ columns:2 160px; } }
   .masonry figure{
     margin:0 0 12px; break-inside:avoid; position:relative; cursor:pointer; overflow:hidden;
-    border:1px solid var(--line);
+    border:1px solid var(--line); background:var(--sandstone-pale);
   }
-  .masonry img{ width:100%; display:block; transition:transform 0.4s ease; }
+  .masonry img{ width:100%; display:block; transition:transform 0.4s ease, opacity 0.5s ease; }
   .masonry figure:hover img{ transform:scale(1.06); }
   .masonry figcaption{
     position:absolute; left:0; right:0; bottom:0; padding:10px 12px 8px;
@@ -348,8 +412,18 @@
   .lightbox figcaption{ color:var(--sandstone-light); font-size:0.85rem; margin-top:14px; text-align:center; max-width:60ch;}
   .lightbox-close{
     position:absolute; top:20px; right:26px; background:none; border:1px solid rgba(232,218,184,0.4);
-    color:#fff; width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:1.1rem;
+    color:#fff; width:38px; height:38px; border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
   }
+
+  /* ---------- image loading: skeleton + fade ---------- */
+  .img-fade{ opacity:0; transition:opacity 0.45s ease; }
+  .img-fade.is-loaded{ opacity:1; }
+  .img-skel{
+    position:relative; background:linear-gradient(100deg, rgba(23,31,22,0.05) 25%, rgba(23,31,22,0.11) 37%, rgba(23,31,22,0.05) 50%);
+    background-size:400% 100%; animation:skeletonShine 1.6s ease-in-out infinite;
+  }
+  @keyframes skeletonShine{ 0%{background-position:100% 0;} 100%{background-position:-140% 0;} }
 
   /* ---------- references ---------- */
   .refs-section{ background:var(--sandstone-pale); }
@@ -366,34 +440,88 @@
   .footer-top h4{ color:#fff; font-family:var(--mono); text-transform:uppercase; font-size:0.75rem; letter-spacing:0.1em; margin-bottom:14px;}
   .footer-top p, .footer-top li{ font-size:0.88rem; }
   .footer-top ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;}
+  .team-list li{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .team-list a{ color:var(--sandstone-light); opacity:0.75; transition:opacity 0.2s ease, color 0.2s ease; display:inline-flex; }
+  .team-list a:hover{ opacity:1; color:var(--sandstone); }
+  .footer-brand-row{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .footer-brand-row .brand-mark-wrap{ width:44px; height:44px; border-radius:9px; }
   .footer-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; padding-top:22px; font-size:0.78rem; color:#8a9a86;}
+  .footer-bottom a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:inherit; }
 
   /* ---------- misc ---------- */
   .counter{ font-variant-numeric:tabular-nums; }
   ::selection{ background:var(--sandstone); color:var(--ink);}
   a:focus-visible, button:focus-visible{ outline:2px solid var(--rust); outline-offset:2px;}
+
+  @media(max-width:480px){
+    .hero-content{ padding-bottom:56px; }
+    .btn-row{ gap:18px; }
+    .btn{ padding:12px 18px; font-size:0.86rem; }
+    .brand-mark-wrap{ width:42px; height:42px; }
+    .brand-text{ font-size:1.02rem; }
+  }
 </style>
 </head>
 <body>
+<a href="#top" class="skip-link">Skip to content</a>
+
+<!-- ============ ICON SPRITE (replaces all emoji site-wide) ============ -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9z" stroke="currentColor" stroke-width="1.3" fill="none"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.6 7-12a7 7 0 10-14 0c0 5.4 7 12 7 12z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="12" cy="9" r="2.3" stroke="currentColor" stroke-width="1.3" fill="none"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 18h16M4 18l-1-9 5 4 4-6 4 6 5-4-1 9" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M4 10h16M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9-4.6-.6-8-4-8-9V6l8-3z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ruler" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M7 9v3M11 9v3M15 9v3" stroke="currentColor" stroke-width="1.3" fill="none"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="14.4" cy="12" r="0.9" fill="currentColor"/></symbol>
+    <symbol id="i-tower" viewBox="0 0 24 24"><path d="M6 21V9l6-5 6 5v12M9 21v-6h6v6M4 9h16" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mountain" viewBox="0 0 24 24"><path d="M2 20l7-12 4 6 2-3 7 9H2z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wall" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M3 9h18M3 14h18M8 4v5M15 4v5M11.5 9v5M8 14v6M15 14v6" stroke="currentColor" stroke-width="1.1" fill="none"/></symbol>
+    <symbol id="i-corner" viewBox="0 0 24 24"><path d="M6 4v9a5 5 0 005 5h7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M14 14l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="12" cy="12" r="0.9" fill="currentColor"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol>
+    <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 3s6 7 6 11a6 6 0 11-12 0c0-4 6-11 6-11z" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.11-1.52-1.11-1.52-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.3 9.3 0 015 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.5A10.26 10.26 0 0022 12.25C22 6.58 17.52 2 12 2z" fill="currentColor"/></symbol>
+  </defs>
+</svg>
 
 <header class="nav">
   <div class="nav-inner">
     <a href="#top" class="brand">
-      <img class="brand-mark" id="brandLogo" src="https://drive.google.com/thumbnail?id=1WzzuyokmoIKt13AOeKwLNfJCJhB1tojr&sz=w160" alt="Echoes of Stone logo" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Cpath d=%22M4 28V13L8 9V13H12V9L16 5L20 9V13H24V9L28 13V28H4Z%22 stroke=%22%23C9A876%22 stroke-width=%221.6%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M4 28H28%22 stroke=%22%23C9A876%22 stroke-width=%221.6%22/%3E%3C/svg%3E';">
+      <span class="brand-mark-wrap">
+        <img class="brand-mark" id="brandLogo" src="https://drive.google.com/thumbnail?id=1h7ssK4HQ1jkK-jPV9xH2oJJYsjP8mCIj&sz=w200" alt="Echoes of Stone logo" fetchpriority="high" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Cpath d=%22M4 28V13L8 9V13H12V9L16 5L20 9V13H24V9L28 13V28H4Z%22 stroke=%22%239A5A34%22 stroke-width=%221.6%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M4 28H28%22 stroke=%22%239A5A34%22 stroke-width=%221.6%22/%3E%3C/svg%3E';">
+      </span>
       <span class="brand-text">Echoes of <span>Stone</span></span>
     </a>
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" id="navToggle">☰</button>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" id="navToggle">
+      <svg class="icon" aria-hidden="true"><use href="#i-menu" id="navToggleIconUse"></use></svg>
+    </button>
     <nav class="links" id="navLinks">
-      <a href="#facts">Facts</a>
-      <a href="#timeline">Timeline</a>
-      <a href="#map">Map</a>
+      <a href="#top">Overview</a>
+      <a href="#timeline">History</a>
       <a href="#architecture">Architecture</a>
-      <a href="#gates">Gates</a>
-      <a href="#strategy">Strategy</a>
-      <a href="#routes">Routes</a>
-      <a href="#sources">Sources</a>
       <a href="#gallery">Gallery</a>
-      <a href="#references">References</a>
+      <a href="#map">Visit</a>
+      <div class="nav-more" id="navMore">
+        <button class="nav-more-btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false">
+          More <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+        </button>
+        <div class="nav-dropdown" id="navDropdown" role="menu">
+          <a href="#facts" role="menuitem">Quick Facts</a>
+          <a href="#gates" role="menuitem">Gate Explorer</a>
+          <a href="#strategy" role="menuitem">Military Strategy</a>
+          <a href="#routes" role="menuitem">Routes &amp; Geography</a>
+          <a href="#sources" role="menuitem">Reconstruction Sources</a>
+          <a href="#references" role="menuitem">References</a>
+        </div>
+      </div>
     </nav>
   </div>
 </header>
@@ -402,22 +530,22 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
     <div class="wrap hero-content">
-      <div class="hero-badge-row">
-        <span class="badge unesco">🌍 UNESCO World Heritage Site · 1997</span>
-        <span class="badge">Built 1541 CE · Sher Shah Suri</span>
-        <span class="badge">An Echoes of Stone Explorer</span>
+      <div class="hero-kicker">
+        <svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>
+        UNESCO World Heritage Site · Built 1541 by Sher Shah Suri
       </div>
       <h1>Engineering a Fortress That <em>Never Fell</em></h1>
-      <p class="hero-sub">Qila Rohtas is one of the most complete surviving works of 16th-century military architecture in South Asia — a 4-kilometre ring of ashlar stone, 68 bastions, and 12 monumental gates, built to seal the road between Kabul and Delhi. It was besieged in legend and myth, but never taken by storm.</p>
+      <p class="hero-sub">Qila Rohtas is one of the most complete surviving works of 16th-century military architecture in South Asia — a 4-kilometre ring of ashlar stone, 68 bastions, and 12 monumental gates, built to seal the road between Kabul and Delhi.</p>
       <div class="btn-row">
-        <a href="#gates" class="btn btn-primary">Explore the Gates →</a>
-        <a href="#timeline" class="btn btn-ghost">Walk the Timeline</a>
-        <a href="#map" class="btn btn-ghost">Open the Map</a>
+        <a href="#gates" class="btn btn-primary">Explore the Gates <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+        <a href="#timeline" class="btn-text">Walk the timeline <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
       </div>
     </div>
-    <div class="scroll-cue">Scroll to explore</div>
+    <div class="scroll-cue" aria-hidden="true">
+      <svg class="icon" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+    </div>
   </section>
   <div class="battlement sand-on-paper" role="presentation"></div>
 
@@ -432,14 +560,14 @@
     </div>
     <div class="wrap">
       <div class="facts-grid">
-        <div class="fact"><span class="icon">📍</span><span class="num">Dina, Jhelum</span><span class="label">Location</span><span class="desc">Punjab, Pakistan — on the historic Grand Trunk Road, ~16 km NW of Jhelum</span></div>
-        <div class="fact"><span class="icon">🏛</span><span class="num">Sher Shah Suri</span><span class="label">Commissioned by</span><span class="desc">Sur Emperor; construction supervised by Raja Todar Mal</span></div>
-        <div class="fact"><span class="icon">📅</span><span class="num"><span class="counter" data-target="1541">0</span></span><span class="label">Year construction began</span><span class="desc">Completed under his successor after Sher Shah's death in 1545</span></div>
-        <div class="fact"><span class="icon">🛡</span><span class="num">Never Taken</span><span class="label">Military record</span><span class="desc">Built to block Humayun's return and subdue the Gakhar tribes</span></div>
-        <div class="fact"><span class="icon">🌍</span><span class="num"><span class="counter" data-target="1997">0</span></span><span class="label">UNESCO inscription</span><span class="desc">Listed under criteria (ii) and (iv) for military architecture</span></div>
-        <div class="fact"><span class="icon">📏</span><span class="num">&gt; <span class="counter" data-target="4">0</span> km</span><span class="label">Wall circumference</span><span class="desc">Massive ashlar masonry walls enclosing roughly 70 hectares</span></div>
-        <div class="fact"><span class="icon">🚪</span><span class="num"><span class="counter" data-target="12">0</span></span><span class="label">Monumental gates</span><span class="desc">Plus several smaller posterns including Sar and Tulla Mori</span></div>
-        <div class="fact"><span class="icon">⛰</span><span class="num"><span class="counter" data-target="68">0</span></span><span class="label">Bastions</span><span class="desc">Semi-circular towers studding the walls at irregular intervals</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-pin"></use></svg></span><span class="num">Dina, Jhelum</span><span class="label">Location</span><span class="desc">Punjab, Pakistan — on the historic Grand Trunk Road, ~16 km NW of Jhelum</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-crown"></use></svg></span><span class="num">Sher Shah Suri</span><span class="label">Commissioned by</span><span class="desc">Sur Emperor; construction supervised by Raja Todar Mal</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-calendar"></use></svg></span><span class="num"><span class="counter" data-target="1541">0</span></span><span class="label">Year construction began</span><span class="desc">Completed under his successor after Sher Shah's death in 1545</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="num">Never Taken</span><span class="label">Military record</span><span class="desc">Built to block Humayun's return and subdue the Gakhar tribes</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-globe"></use></svg></span><span class="num"><span class="counter" data-target="1997">0</span></span><span class="label">UNESCO inscription</span><span class="desc">Listed under criteria (ii) and (iv) for military architecture</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-ruler"></use></svg></span><span class="num">&gt; <span class="counter" data-target="4">0</span> km</span><span class="label">Wall circumference</span><span class="desc">Massive ashlar masonry walls enclosing roughly 70 hectares</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-door"></use></svg></span><span class="num"><span class="counter" data-target="12">0</span></span><span class="label">Monumental gates</span><span class="desc">Plus several smaller posterns including Sar and Tulla Mori</span></div>
+        <div class="fact"><span class="icon-wrap"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-tower"></use></svg></span><span class="num"><span class="counter" data-target="68">0</span></span><span class="label">Bastions</span><span class="desc">Semi-circular towers studding the walls at irregular intervals</span></div>
       </div>
     </div>
   </section>
@@ -452,8 +580,12 @@
         <span class="eyebrow on-dark">Five Centuries</span>
         <h2>A fortress that outlived its builder</h2>
         <p>From a rushed wartime garrison to a living UNESCO village — scroll sideways through Rohtas's timeline.</p>
+        <div class="scroll-hint" id="scrollHint">
+          <span>Scroll horizontally</span>
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </div>
       </div>
-      <div class="timeline-scroll" id="timelineScroll">
+      <div class="timeline-scroll" id="timelineScroll" tabindex="0" role="region" aria-label="Rohtas Fort historical timeline, scrollable horizontally">
         <div class="t-item"><span class="t-year">1539</span><h3 class="t-title">The name is born</h3><p class="t-desc">Sher Shah Suri captures Rohtasgarh fort in Bihar from a local Hindu prince — the name he later gives his new Punjab stronghold.</p></div>
         <div class="t-item"><span class="t-year">1541</span><h3 class="t-title">Construction begins</h3><p class="t-desc">Fresh from defeating Emperor Humayun at Kanauj, Sher Shah orders a fortified complex at Rohtas, supervised by finance minister Raja Todar Mal.</p></div>
         <div class="t-item"><span class="t-year">1545</span><h3 class="t-title">Sher Shah dies</h3><p class="t-desc">The emperor dies before the fort is finished; work continues under his son, Islam Shah Suri.</p></div>
@@ -503,7 +635,7 @@
       </div>
       <div class="arch-grid">
         <div class="arch-card">
-          <img class="arch-card-img" data-cf="An interior shot from the walls of Rohtas by Usman Ghani.JPG" alt="Interior view of Rohtas Fort's defensive walls" loading="lazy">
+          <div class="arch-card-imgwrap"><img class="arch-card-img" src="https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/western-wall/photos/rohtas-fort_westernwall01.jpg" alt="Interior view of Rohtas Fort's defensive walls" loading="lazy" decoding="async"></div>
           <div class="arch-card-body">
           <span class="sub">Defensive Walls</span>
           <h3>Massive ashlar masonry</h3>
@@ -517,7 +649,7 @@
           </div>
         </div>
         <div class="arch-card">
-          <img class="arch-card-img" data-cf="5 Rihtas Fort by Hassan.jpg" alt="Bastions along the Rohtas Fort wall" loading="lazy">
+          <div class="arch-card-imgwrap"><img class="arch-card-img" src="https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/kabuli-gate/photos/rohtas-fort_kabuligate02.jpg" alt="Bastions along the Rohtas Fort wall" loading="lazy" decoding="async"></div>
           <div class="arch-card-body">
           <span class="sub">Bastions</span>
           <h3>68 fighting towers</h3>
@@ -531,7 +663,7 @@
           </div>
         </div>
         <div class="arch-card">
-          <img class="arch-card-img" data-cf="An other architectural detail from Sohail Gate by Usman Ghani.JPG" alt="Carved stonework detail at Rohtas Fort" loading="lazy">
+          <div class="arch-card-imgwrap"><img class="arch-card-img" src="https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg" alt="Carved stonework detail at Rohtas Fort" loading="lazy" decoding="async"></div>
           <div class="arch-card-body">
           <span class="sub">Machicolations</span>
           <h3>Boiling oil, by design</h3>
@@ -564,8 +696,10 @@
   <div class="modal-overlay" id="gateModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <div class="modal-wrap">
-        <button class="modal-close" id="modalClose" aria-label="Close gate details">✕</button>
-        <img class="modal-img" id="modalImg" src="" alt="">
+        <button class="modal-close" id="modalClose" aria-label="Close gate details">
+          <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
+        </button>
+        <div class="modal-imgwrap"><img class="modal-img" id="modalImg" src="" alt=""></div>
       </div>
       <div class="modal-body">
         <span class="eyebrow" id="modalTag"></span>
@@ -588,12 +722,12 @@
         <p>Rohtas was never besieged in earnest — its reputation alone did much of the defending. Here's the engineering logic behind that reputation.</p>
       </div>
       <div class="strategy-grid">
-        <div class="strategy-card"><span class="glyph">⛰️</span><h4>Commanding terrain</h4><p>Built on a hilltop roughly 90 m above its surroundings, where the Kahan river meets the Parnal Khas stream — approach is uphill from almost every direction.</p></div>
-        <div class="strategy-card"><span class="glyph">🧱</span><h4>Contour-hugging walls</h4><p>Rather than a tidy geometric outline, the irregular wall plan follows the cliff edge, denying attackers flat, predictable ground to mass against.</p></div>
-        <div class="strategy-card"><span class="glyph">🌀</span><h4>Trap gates</h4><p>Gates like Langar Khani bend at an L-shaped angle, forcing attackers to slow down and turn — directly into the line of fire from flanking bastions.</p></div>
-        <div class="strategy-card"><span class="glyph">🎯</span><h4>Killing zones</h4><p>Overlapping bastion fields of fire mean any breach point can be covered from multiple angles at once, rather than a single defended line.</p></div>
-        <div class="strategy-card"><span class="glyph">🚪</span><h4>Controlled entry</h4><p>Twelve monumental gates plus small posterns mean the garrison can choose exactly where — and whether — to let anyone in.</p></div>
-        <div class="strategy-card"><span class="glyph">💧</span><h4>Independent water</h4><p>Three baolis, cut deep into limestone, gave a besieged garrison of up to 30,000 men water security without ever leaving the walls.</p></div>
+        <div class="strategy-card"><span class="glyph"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-mountain"></use></svg></span><h4>Commanding terrain</h4><p>Built on a hilltop roughly 90 m above its surroundings, where the Kahan river meets the Parnal Khas stream — approach is uphill from almost every direction.</p></div>
+        <div class="strategy-card"><span class="glyph"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-wall"></use></svg></span><h4>Contour-hugging walls</h4><p>Rather than a tidy geometric outline, the irregular wall plan follows the cliff edge, denying attackers flat, predictable ground to mass against.</p></div>
+        <div class="strategy-card"><span class="glyph"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-corner"></use></svg></span><h4>Trap gates</h4><p>Gates like Langar Khani bend at an L-shaped angle, forcing attackers to slow down and turn — directly into the line of fire from flanking bastions.</p></div>
+        <div class="strategy-card"><span class="glyph"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-target"></use></svg></span><h4>Killing zones</h4><p>Overlapping bastion fields of fire mean any breach point can be covered from multiple angles at once, rather than a single defended line.</p></div>
+        <div class="strategy-card"><span class="glyph"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-lock"></use></svg></span><h4>Controlled entry</h4><p>Twelve monumental gates plus small posterns mean the garrison can choose exactly where — and whether — to let anyone in.</p></div>
+        <div class="strategy-card"><span class="glyph"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-droplet"></use></svg></span><h4>Independent water</h4><p>Three baolis, cut deep into limestone, gave a besieged garrison of up to 30,000 men water security without ever leaving the walls.</p></div>
       </div>
 
       <div class="strategy-diagram" aria-hidden="true">
@@ -656,27 +790,27 @@
       </div>
 
       <details class="acc" open>
-        <summary>Historical drawings &amp; inscriptions <span class="plus">+</span></summary>
+        <summary>Historical drawings &amp; inscriptions <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
         <div class="acc-body">Persian calligraphic inscriptions on the Shishi, Talaqi, Khwas Khani, Langar Khani, and Gatali gates record construction dates and dedications, giving historians fixed points to anchor the wider chronology around.</div>
       </details>
       <details class="acc">
-        <summary>British colonial surveys <span class="plus">+</span></summary>
+        <summary>British colonial surveys <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
         <div class="acc-body">19th- and early 20th-century colonial-era surveyors documented gate dimensions, inscriptions, and the fort's condition, producing some of the earliest systematic records used to track deterioration over time.</div>
       </details>
       <details class="acc">
-        <summary>UNESCO nomination &amp; monitoring reports <span class="plus">+</span></summary>
+        <summary>UNESCO nomination &amp; monitoring reports <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
         <div class="acc-body">The 1997 World Heritage nomination file and subsequent state-of-conservation reports document the fort's boundaries, authenticity, and the specific criteria — (ii) architectural influence and (iv) military engineering — under which it was listed.</div>
       </details>
       <details class="acc">
-        <summary>Archaeological &amp; conservation studies <span class="plus">+</span></summary>
+        <summary>Archaeological &amp; conservation studies <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
         <div class="acc-body">Pakistan's Department of Archaeology and Museums, together with the Himalayan Wildlife Foundation's Rohtas Fort Conservation Programme (launched 2000, with the Royal Norwegian Embassy), has restored the Shah Chandwali gate's central archway — the fort's only modern reconstruction — and undertaken ongoing conservation of Haveli Man Singh, Talaqi Gate, and Gatali Gate.</div>
       </details>
       <details class="acc">
-        <summary>Satellite imagery &amp; old maps <span class="plus">+</span></summary>
+        <summary>Satellite imagery &amp; old maps <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
         <div class="acc-body">Because Rohtas follows an irregular, contour-driven plan rather than a repeatable geometric layout, aerial and satellite imagery is essential for mapping the true extent of the walls against the hillside they sit on.</div>
       </details>
       <details class="acc">
-        <summary>Photographs &amp; damage records <span class="plus">+</span></summary>
+        <summary>Photographs &amp; damage records <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
         <div class="acc-body">Documentation of the 2005 partial collapse of Talaqi Gate — caused by water seepage, heavy rain, and long neglect — gives conservators a before-and-after benchmark for how the fort's stonework fails, and how to prevent it recurring elsewhere.</div>
       </details>
     </div>
@@ -696,7 +830,9 @@
   </section>
 
   <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose" aria-label="Close image">✕</button>
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close image">
+      <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
+    </button>
     <img id="lightboxImg" src="" alt="">
     <figcaption id="lightboxCaption"></figcaption>
   </div>
@@ -730,8 +866,10 @@
     <div class="wrap">
       <div class="footer-top">
         <div>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <img src="https://drive.google.com/thumbnail?id=1WzzuyokmoIKt13AOeKwLNfJCJhB1tojr&sz=w160" alt="Echoes of Stone logo" style="width:34px;height:34px;object-fit:contain;border-radius:4px;" onerror="this.style.display='none';">
+          <div class="footer-brand-row">
+            <span class="brand-mark-wrap">
+              <img src="https://drive.google.com/thumbnail?id=1h7ssK4HQ1jkK-jPV9xH2oJJYsjP8mCIj&sz=w200" alt="Echoes of Stone logo" class="brand-mark" loading="lazy" onerror="this.parentElement.style.display='none';">
+            </span>
             <h4 style="margin:0;">Echoes of Stone</h4>
           </div>
           <h4 style="opacity:0.7;">Rohtas Fort: Engineering a Fortress That Never Fell</h4>
@@ -739,19 +877,18 @@
         </div>
         <div>
           <h4>Team</h4>
-          <ul>
-            <li>Seerat E Zahra</li>
-            <li>Laraib Butt</li>
-            <li>Taha</li>
-            <li>Sagar Mehmood</li>
+          <ul class="team-list">
+            <li><span>Seerat E Zahra</span><a href="https://github.com/seeratzahra500" target="_blank" rel="noopener" aria-label="Seerat E Zahra on GitHub"><svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg></a></li>
+            <li><span>Laraib Butt</span><a href="https://github.com/laraib-b" target="_blank" rel="noopener" aria-label="Laraib Butt on GitHub"><svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg></a></li>
+            <li><span>Taha Abid</span><a href="https://github.com/Taha6497-eng" target="_blank" rel="noopener" aria-label="Taha Abid on GitHub"><svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg></a></li>
+            <li><span>Sagar Mehmood</span><a href="https://github.com/loRagas" target="_blank" rel="noopener" aria-label="Sagar Mehmood on GitHub"><svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg></a></li>
           </ul>
         </div>
         <div>
           <h4>Project</h4>
           <ul>
-            <li></li>
-            <li>University / Department</li>
-            <li><a href="#" target="_blank" rel="noopener">GitHub Repository ↗</a></li>
+            <li>FAST Nuces, Islamabad</li>
+            <li><a href="https://github.com/Seeratzahra500/PMW_TeamRohtas" target="_blank" rel="noopener">GitHub Repository <svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg></a></li>
           </ul>
         </div>
       </div>
@@ -764,8 +901,14 @@
 
 </main>
 
+<!-- GSAP (loaded synchronously, before the page script, so it's ready when needed) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
 <script>
 (function(){
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // ---------- Wikimedia Commons helper ----------
   // Builds a correctly-encoded Special:FilePath URL from a raw Commons filename.
   // Encoding is done here (not by hand in markup) so spaces, apostrophes,
@@ -773,13 +916,60 @@
   function cf(filename, width){
     return 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(filename) + (width ? ('?width=' + width) : '');
   }
+
+  // ---------- image loading system: skeleton shimmer + fade-in + graceful fallback ----------
+  var FALLBACK_IMG = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
+    '<rect width="400" height="300" fill="#E8DAB8"/>' +
+    '<g fill="none" stroke="#9A5A34" stroke-width="2" opacity="0.55">' +
+    '<path d="M30 230 L110 130 L170 190 L235 95 L370 230 Z"/>' +
+    '<circle cx="330" cy="70" r="18"/>' +
+    '</g>' +
+    '<text x="200" y="265" font-family="monospace" font-size="13" fill="#171F16" text-anchor="middle">Image unavailable</text>' +
+    '</svg>'
+  );
+  function wireImg(imgEl){
+    imgEl.classList.add('img-fade', 'img-skel');
+    function markLoaded(){
+      imgEl.classList.remove('img-skel');
+      imgEl.classList.add('is-loaded');
+    }
+    imgEl.addEventListener('load', markLoaded, {once:true});
+    imgEl.addEventListener('error', function onErr(){
+      imgEl.removeEventListener('error', onErr);
+      if(imgEl.src !== FALLBACK_IMG){
+        imgEl.src = FALLBACK_IMG;
+        if(!imgEl.alt) imgEl.alt = 'Image unavailable';
+      }
+      markLoaded();
+    }, {once:true});
+    if(imgEl.complete && imgEl.naturalWidth){ markLoaded(); }
+  }
+
   // Resolve any static <img data-cf="Commons filename.jpg"> already in the markup
   document.querySelectorAll('img[data-cf]').forEach(function(img){
+    wireImg(img);
     img.src = cf(img.getAttribute('data-cf'), 700);
-    img.addEventListener('error', function(){ img.style.display = 'none'; }, {once:true});
   });
 
-  // ---------- nav toggle ----------
+  // Architecture cards now use direct src URLs — just wire the loading/fade behaviour
+  document.querySelectorAll('.arch-card-img').forEach(function(img){
+    var src = img.getAttribute('src');
+    img.removeAttribute('src');
+    wireImg(img);
+    img.src = src;
+  });
+
+  // Hero background: preload, then reveal; fall back to a themed gradient if it fails
+  var heroBg = document.getElementById('heroBg');
+  var heroUrl = "https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg";
+  var heroPre = new Image();
+  heroPre.onerror = function(){
+    heroBg.style.backgroundImage = "linear-gradient(180deg, rgba(16,24,17,0.55) 0%, rgba(14,22,15,0.7) 55%, rgba(10,17,11,0.96) 100%), linear-gradient(135deg, #28402C, #101C13)";
+  };
+  heroPre.src = heroUrl;
+
+  // ---------- nav toggle (mobile) ----------
   var navToggle = document.getElementById('navToggle');
   var navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', function(){
@@ -790,6 +980,26 @@
     a.addEventListener('click', function(){ navLinks.classList.remove('open'); });
   });
 
+  // ---------- nav "More" dropdown ----------
+  var navMore = document.getElementById('navMore');
+  var navMoreBtn = document.getElementById('navMoreBtn');
+  var navDropdown = document.getElementById('navDropdown');
+  function closeDropdown(){
+    navDropdown.classList.remove('open');
+    navMoreBtn.setAttribute('aria-expanded', 'false');
+  }
+  navMoreBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = navDropdown.classList.toggle('open');
+    navMoreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e){
+    if(!navMore.contains(e.target)) closeDropdown();
+  });
+  navDropdown.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ closeDropdown(); navLinks.classList.remove('open'); });
+  });
+
   // ---------- counters ----------
   var counters = document.querySelectorAll('.counter');
   var counterObs = new IntersectionObserver(function(entries){
@@ -797,7 +1007,7 @@
       if(entry.isIntersecting){
         var el = entry.target;
         var target = parseInt(el.getAttribute('data-target'), 10);
-        var duration = 1200;
+        var duration = prefersReducedMotion ? 1 : 1200;
         var startTime = null;
         function step(ts){
           if(!startTime) startTime = ts;
@@ -813,20 +1023,63 @@
   }, {threshold:0.5});
   counters.forEach(function(el){ counterObs.observe(el); });
 
-  // ---------- timeline reveal ----------
+  // ---------- timeline reveal: GSAP + ScrollTrigger, with a safe fallback ----------
   var tItems = document.querySelectorAll('.t-item');
-  var tObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+  if(window.gsap && window.ScrollTrigger && !prefersReducedMotion){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.set(tItems, {opacity:0, y:26});
+    gsap.to(tItems, {
+      opacity:1, y:0, duration:0.65, ease:'power2.out', stagger:0.1,
+      scrollTrigger:{ trigger:'#timelineScroll', start:'top 82%', toggleActions:'play none none none' }
     });
-  }, {threshold:0.2, root: document.getElementById('timelineScroll')});
-  tItems.forEach(function(el){ tObs.observe(el); });
+  } else {
+    tItems.forEach(function(el){ el.classList.add('visible'); }); // no-JS / reduced-motion fallback
+    var tObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('visible'); } });
+    }, {threshold:0.2, root: document.getElementById('timelineScroll')});
+    tItems.forEach(function(el){ tObs.observe(el); });
+  }
+
+  // Horizontal-scroll hint: fades once the user interacts with the timeline
+  var timelineScroll = document.getElementById('timelineScroll');
+  var scrollHint = document.getElementById('scrollHint');
+  function dismissHint(){
+    scrollHint.classList.add('hidden');
+    timelineScroll.removeEventListener('scroll', dismissHint);
+    timelineScroll.removeEventListener('touchmove', dismissHint);
+  }
+  timelineScroll.addEventListener('scroll', dismissHint, {once:true, passive:true});
+  timelineScroll.addEventListener('touchmove', dismissHint, {once:true, passive:true});
+
+  // Desktop mouse-drag-to-scroll for the horizontal timeline (touch already works natively)
+  (function(){
+    var isDown = false, startX, scrollLeft;
+    timelineScroll.addEventListener('mousedown', function(e){
+      isDown = true;
+      timelineScroll.classList.add('dragging');
+      startX = e.pageX - timelineScroll.offsetLeft;
+      scrollLeft = timelineScroll.scrollLeft;
+    });
+    window.addEventListener('mouseup', function(){
+      isDown = false;
+      timelineScroll.classList.remove('dragging');
+    });
+    timelineScroll.addEventListener('mouseleave', function(){ isDown = false; timelineScroll.classList.remove('dragging'); });
+    timelineScroll.addEventListener('mousemove', function(e){
+      if(!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - timelineScroll.offsetLeft;
+      timelineScroll.scrollLeft = scrollLeft - (x - startX);
+      dismissHint();
+    });
+  })();
 
   // ---------- gates data ----------
   var gates = [
     {
       name:"Sohail Gate", tag:"Ceremonial Main Entrance",
       file:"Sohail Gate - Rohtas Fort by ibneazhar 10.jpg",
+      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWgZIu2xQhCmoZHVQIVdPKE-Uprgg1WYcmmQIjUZDAeA&s=10",
       desc:"The best-preserved and most heavily decorated gate at Rohtas, Sohail Gate shows off the finest masonry of the Sur Empire and likely served as the fort's ceremonial main entrance. It's named after the local saint Sohail Bukhari, whose remains rest in the gate's southwestern portion.",
       specs:[["Height","21.34 m (70 ft)"],["Width","20.73 m (68 ft)"],["Depth","15 m (49 ft)"],["Archway","4.72 m (15.5 ft) wide"]],
       fact:"Its upper story now houses the Sher Shah Suri Museum, and floral motifs plus seven outer battlements mark it as the grandest gate in the fort."
@@ -834,6 +1087,7 @@
     {
       name:"Shah Chandwali Gate", tag:"Citadel Link",
       file:"Shah Chandwali Gate Rohtas Fort.jpg",
+      url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/shah-chandwali-gate/photos/rohtas-fort_shahchandwaligate02.jpg",
       desc:"This gate connects the citadel to the rest of the fort and is named after Shah Chandwali, a labourer said to have refused payment for his work and to have died during construction — he is buried nearby.",
       specs:[["Role","Citadel access"],["Wall link","533 m dividing wall"],["Note","Only modern reconstruction"],["Restoration","Himalayan Wildlife Foundation"]],
       fact:"Its central archway was rebuilt in recent conservation work — the only part of the entire fort that is a modern reconstruction rather than original 16th-century fabric."
@@ -841,6 +1095,7 @@
     {
       name:"Kabuli Gate", tag:"Faces Kabul",
       file:"Rohtas Fort Magnificent Kabuli Gate.jpg",
+      url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/kabuli-gate/photos/rohtas-fort_kabuligate02.jpg",
       desc:"Named for its orientation toward Kabul, this gate was built in two stages around a stepwell and is flanked by two bastions. The Shahi Mosque sits just to its south, which is why some records also call it Shahi Darwaza.",
       specs:[["Orientation","Northwest, toward Kabul"],["Opening width","≈ 3.15 m (10.3 ft)"],["Nearby","Shahi Mosque, Shahi Baoli"],["Today","Visitor centre & museum"]],
       fact:"The gate now houses a visitor information centre and museum established by the Himalayan Wildlife Foundation."
@@ -848,6 +1103,7 @@
     {
       name:"Shishi Gate", tag:"The Glass Gate",
       file:"Rohtas Fort 8.jpg",
+      url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/baoli/photos/rohtas-fort_baoli01.jpg",
       desc:"Named after the glazed blue tilework (Kashi kari) once set into the spandrels of its outer arch — among the earliest known examples of the technique in the region, later perfected in Lahore's Mughal architecture.",
       specs:[["Feature","Glazed tile spandrels"],["Inscription","Persian, dated 948 AH / 1541 CE"],["Significance","Earliest known glazed tile use here"],["Influence","Precursor to Mughal tilework"]],
       fact:"A Persian inscription beside the gate records the exact Hijri year construction began — one of the fort's few firmly dated details."
@@ -855,6 +1111,7 @@
     {
       name:"Langar Khani Gate", tag:"The Trap Gate",
       file:"Entrance Gate, Rohtas Fort.JPG",
+      url:"https://thumbs.dreamstime.com/b/langar-khani-gate-path-rainwater-hole-inside-rohtas-fort-414328145.jpg",
       desc:"A double gate opening directly into the citadel, deliberately placed in the direct line of fire from surrounding bastions. Its L-shaped path forces anyone entering to make a sharp right turn — slowing any attacking force to a crawl.",
       specs:[["Height","15.25 m (50 ft)"],["Width","3.5 m (11 ft)"],["Layout","L-shaped, forced turn"],["Leads to","Langar Khana (kitchens)"]],
       fact:"Two flanking bastions contain kitchens, storerooms, and a water well — making this stretch of wall self-sufficient even under siege."
@@ -862,6 +1119,7 @@
     {
       name:"Talaqi Gate", tag:"The Ill-Omened Gate",
       file:"Talaqi Gate (45996396274).jpg",
+      url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/talaqi-gate/photos/rohtas-fort_talaqigate03.jpg",
       desc:"According to legend, Prince Sabir Suri fell fatally ill with fever shortly after entering this gate, and it has carried an unlucky reputation ever since — 'Talaqi' is often linked to the Urdu word for divorce, or separation.",
       specs:[["Height","15.25 m (50 ft)"],["Width","13.8 m (45 ft)"],["Bastions","One on each side"],["2005 event","Partial collapse from seepage"]],
       fact:"In early 2005, water seepage and heavy rain caused the gate's left inner face to collapse — a case study conservators still reference today."
@@ -869,6 +1127,7 @@
     {
       name:"Mori (Kashmiri) Gate", tag:"Faces Kashmir",
       file:"Rohtas Fort (Jehlum).jpg",
+      url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/tulla-mori-gate/photos/rohtas-fort_tullamorigate03.jpg",
       desc:"Opening to the north toward Kashmir, this gate is also known as the Kashmiri Gate. It leads through a sequence of two connected interior chambers rather than opening straight through.",
       specs:[["Orientation","North, toward Kashmir"],["Layout","Two connected chambers"],["Also called","Kashmiri Gate"],["Type","Secondary gate"]],
       fact:"Its double-chamber layout meant defenders could seal off the outer chamber even if the very first door was breached."
@@ -876,34 +1135,36 @@
     {
       name:"Khwas Khani Gate", tag:"The Original Main Entrance",
       file:"Exit Gate of Rohtas Fort.jpg",
+      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSEIbOgXlzXYTmwY_uPhhen9UtxUg2l09fMWY0M2v53A&s=10",
       desc:"Named for Khawas Khan Marwat, one of Sher Shah Suri's most trusted generals, this double gate was the fort's original main entrance from the Grand Trunk Road, and mirrors its inner and outer archways almost exactly.",
       specs:[["Outer gate","12.8 m wide, 8 m deep"],["Battlements","Five, with loopholes"],["Decoration","Calligraphy & sunflower motifs"],["Role","Original GT Road entrance"]],
       fact:"Unusually, its inner gate also carries five battlements — the only interior gate at Rohtas built to that same defensive standard as the outer walls."
     }
   ];
-  gates.forEach(function(g){ g.img = cf(g.file, 900); });
+  function gImgSrc(g, width){ return g.url ? g.url : cf(g.file, width); }
+  gates.forEach(function(g){ g.img = gImgSrc(g, 900); });
 
   var grid = document.getElementById('gatesGrid');
   gates.forEach(function(g, i){
     var btn = document.createElement('button');
     btn.className = 'gate-card';
-    btn.innerHTML = '<img class="gate-thumb" src="' + cf(g.file, 300) + '" alt="" loading="lazy">' +
+    btn.innerHTML = '<div class="gate-thumb-wrap"><img class="gate-thumb" src="' + gImgSrc(g, 300) + '" alt="" loading="lazy" decoding="async"></div>' +
                     '<span class="gate-num">' + String(i+1).padStart(2,'0') + ' / ' + gates.length + '</span>' +
                     '<span class="gate-name">' + g.name + '</span>' +
                     '<span class="gate-tag">' + g.tag + '</span>';
     btn.addEventListener('click', function(){ openModal(g); });
-    var thumbEl = btn.querySelector('.gate-thumb');
-    thumbEl.addEventListener('error', function(){ thumbEl.style.display = 'none'; }, {once:true});
+    wireImg(btn.querySelector('.gate-thumb'));
     grid.appendChild(btn);
   });
 
   var modal = document.getElementById('gateModal');
   function openModal(g){
     var modalImgEl = document.getElementById('modalImg');
+    modalImgEl.classList.remove('is-loaded');
     modalImgEl.style.display = '';
+    wireImg(modalImgEl);
     modalImgEl.src = g.img;
     modalImgEl.alt = g.name;
-    modalImgEl.onerror = function(){ modalImgEl.style.display = 'none'; };
     document.getElementById('modalTag').textContent = g.tag;
     document.getElementById('modalTitle').textContent = g.name;
     document.getElementById('modalDesc').textContent = g.desc;
@@ -927,49 +1188,54 @@
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); closeLightbox(); } });
 
   // ---------- gallery ----------
-  // All filenames below are verified real Wikimedia Commons files (checked against
-  // live category listings), run through cf() so encoding is always correct.
+  // Filenames are verified real Wikimedia Commons files; some entries use a direct
+  // external `url` where that was supplied. Both paths go through the same
+  // loading/fallback pipeline so nothing shows a broken-image icon or collapses.
   var images = [
-    {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSEIbOgXlzXYTmwY_uPhhen9UtxUg2l09fMWY0M2v53A&s=10", cap:"Sohail Gate, the ceremonial main entrance"},
+    {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWgZIu2xQhCmoZHVQIVdPKE-Uprgg1WYcmmQIjUZDAeA&s=10", cap:"Sohail Gate, the ceremonial main entrance"},
     {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/kabuli-gate/photos/rohtas-fort_kabuligate02.jpg", cap:"Kabuli Gate, facing toward Kabul"},
-    {file:"Kabuli Gate - Rohtas Fort by Usman Ghani.jpg", cap:"Kabuli Gate, detail view"},
-    {file:"Rohtas Fort Gate Elevation.jpg", cap:"Elevation view of a fort gate"},
-    {file:"Rohtas Fort (Jehlum).jpg", cap:"General view of the fort's walls"},
-    {file:"Rohtas Fort (Jhelum, Pakistan) - World Heritage Site.jpeg", cap:"Rohtas Fort, UNESCO World Heritage Site"},
-    {file:"Rohtas Fort 1.jpg", cap:"Ashlar stone bastions along the curtain wall"},
-    {file:"Rohtas Fort 3.jpg", cap:"A gateway interior, showing stone construction"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/kabuli-gate/photos/rohtas-fort_kabuligate02.jpg", cap:"Kabuli Gate, detail view"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg", cap:"Elevation view of a fort gate"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/western-wall/photos/rohtas-fort_westernwall01.jpg", cap:"General view of the fort's walls"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/haveli-man-singh/photos/rohtas-fort_havelimansingh01.jpg", cap:"Rohtas Fort, UNESCO World Heritage Site"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/western-wall/photos/rohtas-fort_westernwall01.jpg", cap:"Ashlar stone bastions along the curtain wall"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/langar-khana-gate/photos/rohtas-fort_langarkhana01.jpg", cap:"A gateway interior, showing stone construction"},
     {url:"https://thumbs.dreamstime.com/b/langar-khani-gate-path-rainwater-hole-inside-rohtas-fort-414328145.jpg", cap:"Langar Khani Gate entrance"},
     {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF8aheb1lfCJBVvLq9iGS1xsMCXxpbGjHSsnpyQ9hOmtSPsXYQSNp_DA&s=10", cap:"Langar Khani Gate, rainwater hole and path"},
-    {file:"Exit Gate of Rohtas Fort.jpg", cap:"Khwas Khani Gate, the original main entrance"},
-    {file:"Faseel Rohtas Fort Jhelum.jpg", cap:"A stretch of the fort's massive faseel (wall)"},
-    {file:"Rohtas Fort 8.jpg", cap:"Detail of gate stonework"},
-    {file:"FORT SOHAIL GATE.jpg", cap:"Sohail Gate, full elevation"},
-    {file:"Sohail Gate (31775580777).jpg", cap:"Sohail Gate seen from the approach road"},
-    {file:"An architectural detail from Sohail Gate by Usman Ghani.JPG", cap:"Carved detail on Sohail Gate"},
+    {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSEIbOgXlzXYTmwY_uPhhen9UtxUg2l09fMWY0M2v53A&s=10", cap:"Khwas Khani Gate, the original main entrance"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/western-wall/photos/rohtas-fort_westernwall01.jpg", cap:"A stretch of the fort's massive faseel (wall)"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/talaqi-gate/photos/rohtas-fort_talaqigate03.jpg", cap:"Detail of gate stonework"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg", cap:"Sohail Gate, full elevation"},
+    {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWgZIu2xQhCmoZHVQIVdPKE-Uprgg1WYcmmQIjUZDAeA&s=10", cap:"Sohail Gate seen from the approach road"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/sohail-gate/photos/rohtas-fort_sohailgate01.jpg", cap:"Carved detail on Sohail Gate"},
     {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/shah-chandwali-gate/photos/rohtas-fort_shahchandwaligate02.jpg", cap:"Shah Chandwali Gate, linking citadel to fort"},
-    {file:"Inside View of Shah Chandwali Gate by Sheikh Rashid Hameed.jpg", cap:"Interior view of Shah Chandwali Gate"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/shah-chandwali-gate/photos/rohtas-fort_shahchandwaligate02.jpg", cap:"Interior view of Shah Chandwali Gate"},
     {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/talaqi-gate/photos/rohtas-fort_talaqigate03.jpg", cap:"Talaqi Gate, the fort's ill-omened gate"},
     {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/tulla-mori-gate/photos/rohtas-fort_tullamorigate03.jpg", cap:"Tulla Mori Gate"},
-    {file:"An interior shot from the walls of Rohtas by Usman Ghani.JPG", cap:"Interior of the fortification walls"},
-    {file:"Kaneez ghar.jpg", cap:"Kaneez Ghar, a residential structure within the fort"},
-    {file:"Sunset in Rohtas fort near Islamabad.jpg", cap:"Sunset light over the fort's ramparts"},
-    {file:"Entrance gate to the Rohtas Fort 071.jpg", cap:"Approach to one of the fort's gateways"},
-    {url:"https://upload.wikimedia.org/wikipedia/commons/0/07/Rohtas_Fort_Gate.jpg", cap:"One of the fort's gates"}
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/western-wall/photos/rohtas-fort_westernwall01.jpg", cap:"Interior of the fortification walls"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/haveli-man-singh/photos/rohtas-fort_havelimansingh01.jpg", cap:"Kaneez Ghar, a residential structure within the fort"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/baoli/photos/rohtas-fort_baoli01.jpg", cap:"Sunset light over the fort's ramparts"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/kabuli-gate/photos/rohtas-fort_kabuligate02.jpg", cap:"Approach to one of the fort's gateways"},
+    {url:"https://www.orientalarchitecture.com/gallery/pakistan/jhelum/rohtas-fort/baoli/photos/rohtas-fort_baoli01.jpg", cap:"The fort's stepped baoli (well)"}
   ];
   function imgSrc(im, width){ return im.url ? im.url : cf(im.file, width); }
   var galleryGrid = document.getElementById('galleryGrid');
   images.forEach(function(im){
     var fig = document.createElement('figure');
-    fig.innerHTML = '<img loading="lazy" src="'+imgSrc(im,700)+'" alt="'+im.cap+'"><figcaption>'+im.cap+'</figcaption>';
+    fig.innerHTML = '<img loading="lazy" decoding="async" src="" alt="'+im.cap+'"><figcaption>'+im.cap+'</figcaption>';
     fig.addEventListener('click', function(){ openLightbox(im); });
     var imgEl = fig.querySelector('img');
-    imgEl.addEventListener('error', function(){ fig.style.display = 'none'; }, {once:true});
+    wireImg(imgEl);
+    imgEl.src = imgSrc(im, 700);
     galleryGrid.appendChild(fig);
   });
   var lightbox = document.getElementById('lightbox');
   function openLightbox(im){
-    document.getElementById('lightboxImg').src = imgSrc(im,1400);
-    document.getElementById('lightboxImg').alt = im.cap;
+    var lbImg = document.getElementById('lightboxImg');
+    lbImg.classList.remove('is-loaded');
+    wireImg(lbImg);
+    lbImg.src = imgSrc(im,1400);
+    lbImg.alt = im.cap;
     document.getElementById('lightboxCaption').textContent = im.cap;
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
